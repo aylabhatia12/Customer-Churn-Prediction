@@ -321,3 +321,54 @@ plt.ylabel("Number of Customers")
 plt.grid(axis="y")
 
 plt.show()
+
+
+# ---------------------------------------------------------
+# 14. Random Forest Feature Importance
+# ---------------------------------------------------------
+
+fitted_preprocessor = random_forest_model.named_steps[
+    "preprocessor"
+]
+
+fitted_model = random_forest_model.named_steps[
+    "model"
+]
+
+feature_names = fitted_preprocessor.get_feature_names_out()
+
+feature_importance = pd.DataFrame({
+    "Feature": feature_names,
+    "Importance": fitted_model.feature_importances_
+})
+
+feature_importance = feature_importance.sort_values(
+    by="Importance",
+    ascending=False
+)
+
+top_features = feature_importance.head(10)
+
+print()
+print("----- Top 10 Important Features -----")
+
+print(top_features)
+
+
+# Plot top 10 features
+plt.figure(figsize=(10, 6))
+
+plt.barh(
+    top_features["Feature"],
+    top_features["Importance"]
+)
+
+plt.gca().invert_yaxis()
+
+plt.title("Top 10 Random Forest Features")
+plt.xlabel("Feature Importance")
+plt.ylabel("Feature")
+
+plt.grid(axis="x")
+
+plt.show()
